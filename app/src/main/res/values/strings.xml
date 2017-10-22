@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="error_message">Failed to get results.</string>
+    <string name="sort_by">Sort By</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="highest_rated">Highest Rated</string>
+    <string name="error_message">Failed to get results</string>
 </resources>

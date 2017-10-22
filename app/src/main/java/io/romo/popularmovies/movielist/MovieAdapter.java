@@ -1,13 +1,18 @@
 package io.romo.popularmovies.movielist;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
 import io.romo.popularmovies.model.Movie;
 
@@ -20,9 +25,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onListItemClick(Movie movie);
     }
 
-    public MovieAdapter(List<Movie> movieList, ListItemClickListener listItemClickListener) {
-        this.movieList = movieList;
+    public MovieAdapter(ListItemClickListener listItemClickListener) {
         this.listItemClickListener = listItemClickListener;
+    }
+
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,19 +55,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public class MovieViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private ImageView moviePoster;
+        @BindView(R.id.movie_poster) ImageView moviePoster;
         private Movie movie;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
 
-            moviePoster = itemView.findViewById(R.id.movie_poster);
+            itemView.setOnClickListener(this);
         }
 
         public void bindMovie(Movie movie) {
             this.movie = movie;
-            // TODO Load movie poster
+            Context context = moviePoster.getContext();
+            Picasso.with(context).load(movie.getPosterPath())
+                    .placeholder(R.drawable.place_holder_w300)
+                    .into(moviePoster);
         }
 
         @Override
