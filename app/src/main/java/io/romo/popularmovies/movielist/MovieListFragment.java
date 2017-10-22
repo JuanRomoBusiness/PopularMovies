@@ -1,5 +1,6 @@
 package io.romo.popularmovies.movielist;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
 import io.romo.popularmovies.model.Movie;
 import io.romo.popularmovies.model.SortBy;
+import io.romo.popularmovies.moviedetails.MovieDetailsActivity;
 import io.romo.popularmovies.util.JsonUtils;
 import io.romo.popularmovies.util.NetworkUtils;
 
@@ -63,7 +65,7 @@ public class MovieListFragment extends Fragment
             sortBy = (SortBy) savedInstanceState.getSerializable(STATE_SORT_BY);
         }
 
-        loadMovieData();
+        loadMovies();
 
         return view;
     }
@@ -91,14 +93,21 @@ public class MovieListFragment extends Fragment
         int itemId = item.getItemId();
 
         if (item.getGroupId() == R.id.sort_by) {
+            SortBy previousSortBy = sortBy;
+
             if (itemId == R.id.most_popular) {
                 sortBy = SortBy.MOST_POPULAR;
             } else {
                 sortBy = SortBy.HIGHEST_RATED;
             }
+
+            // Sorting order has not changed, therefore their is no need to reload movies
+            if (sortBy == previousSortBy) {
+                return true;
+            }
             item.setChecked(true);
 
-            loadMovieData();
+            loadMovies();
             return true;
         }
 
@@ -107,12 +116,13 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onListItemClick(Movie movie) {
-        // TODO Display movie detail screen
+        Intent intent = MovieDetailsActivity.newIntent(getActivity(), movie);
+        startActivity(intent);
     }
 
-    private void loadMovieData() {
+    private void loadMovies() {
         URL url = NetworkUtils.buildUrl(sortBy);
-        new FetchMoviesTask().execute(url);
+        new LoadMoviesTask().execute(url);
     }
 
     private void showMovies() {
@@ -125,7 +135,7 @@ public class MovieListFragment extends Fragment
         errorMessage.setVisibility(View.VISIBLE);
     }
 
-    private class FetchMoviesTask extends AsyncTask<URL, Void, List<Movie>> {
+    private class LoadMoviesTask extends AsyncTask<URL, Void, List<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -155,6 +165,7 @@ public class MovieListFragment extends Fragment
             if (movieList != null) {
                 showMovies();
                 adapter.setMovieList(movieList);
+                movies.getLayoutManager().scrollToPosition(0);
             } else {
                 showErrorMessage();
             }

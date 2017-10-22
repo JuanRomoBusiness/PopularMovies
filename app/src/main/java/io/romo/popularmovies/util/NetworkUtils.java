@@ -24,7 +24,7 @@ public class NetworkUtils {
 
     public static URL buildUrl(SortBy sortBy) {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(sortBy.getPath())
+                .appendPath(sortBy == SortBy.MOST_POPULAR ? PATH_POPULAR : PATH_TOP_RATED)
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
 
