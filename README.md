@@ -1,6 +1,6 @@
 # Popular Movies
 
-<img src="screenshots/launcher.png" width=300 >
+<img src="art/launcher.png" width=300 >
 
 ### Prerequisites
 

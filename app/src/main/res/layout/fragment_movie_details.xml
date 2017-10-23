@@ -16,7 +16,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/poster"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

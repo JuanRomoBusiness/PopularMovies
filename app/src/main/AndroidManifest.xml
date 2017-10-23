@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/PopularMovies">
 
-        <activity android:name=".movielist.MovieListActivity">
+        <activity
+            android:name=".movielist.MovieListActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +24,6 @@
 
         <activity
             android:name=".moviedetails.MovieDetailsActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".movielist.MovieListActivity">
         </activity>
 
