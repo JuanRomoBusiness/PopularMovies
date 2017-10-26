@@ -32,11 +32,11 @@ public class NetworkUtils {
 
     private final static String BASE_URL = "https://api.themoviedb.org/3/movie";
 
-    public final static String PATH_POPULAR = "popular";
-    public final static String PATH_TOP_RATED = "top_rated";
+    private final static String PATH_POPULAR = "popular";
+    private final static String PATH_TOP_RATED = "top_rated";
 
     private final static String PARAM_API_KEY = "api_key";
-    private final static String API_KEY = BuildConfig.API_KEY;
+    private final static String API_KEY = BuildConfig.TMDb_API_KEY;
 
     public static URL buildUrl(SortBy sortBy) {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()

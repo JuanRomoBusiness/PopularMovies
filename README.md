@@ -4,9 +4,9 @@
 
 ### Prerequisites
 
-You will need to obtain an API key from www.themoviedb.org.  Once you have your API key add it to the grade.properties file on the following line:
+You will need to obtain an API key from [TMDb](www.themoviedb.org).  Once you have your API key add it to the grade.properties file on the following line:
 
-    API_KEY = "YOUR API KEY HERE"
+    TMDb_API_KEY = "Your TMDb API key"
 
 ### License
 

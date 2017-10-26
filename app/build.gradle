@@ -17,16 +17,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
     defaultConfig {
         applicationId "io.romo.popularmovies"
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion versions.targetSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "TMDb_API_KEY", TMDb_API_KEY)
     }
     buildTypes {
         release {
