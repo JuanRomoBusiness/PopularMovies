@@ -43,6 +43,10 @@ import io.romo.popularmovies.moviedetails.MovieDetailsActivity;
 import io.romo.popularmovies.util.JsonUtils;
 import io.romo.popularmovies.util.NetworkUtils;
 
+import static io.romo.popularmovies.model.SortBy.FAVORITES;
+import static io.romo.popularmovies.model.SortBy.HIGHEST_RATED;
+import static io.romo.popularmovies.model.SortBy.MOST_POPULAR;
+
 public class MovieListFragment extends Fragment
         implements MovieAdapter.ListItemClickListener {
 
@@ -54,7 +58,7 @@ public class MovieListFragment extends Fragment
     private MovieAdapter adapter;
 
     // By default movies are sorted by most popular
-    private SortBy sortBy = SortBy.MOST_POPULAR;
+    private SortBy sortBy = MOST_POPULAR;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,10 +100,16 @@ public class MovieListFragment extends Fragment
         inflater.inflate(R.menu.fragment_movie_list, menu);
 
         SubMenu sortBySubMenu = menu.findItem(R.id.action_sort_by).getSubMenu();
-        if (sortBy == SortBy.MOST_POPULAR) {
-            sortBySubMenu.findItem(R.id.most_popular).setChecked(true);
-        } else {
-            sortBySubMenu.findItem(R.id.highest_rated).setChecked(true);
+        switch (sortBy) {
+            case MOST_POPULAR:
+                sortBySubMenu.findItem(R.id.most_popular).setChecked(true);
+                break;
+            case HIGHEST_RATED:
+                sortBySubMenu.findItem(R.id.highest_rated).setChecked(true);
+                break;
+            case FAVORITES:
+                sortBySubMenu.findItem(R.id.favorites).setChecked(true);
+                break;
         }
     }
 
@@ -109,11 +119,17 @@ public class MovieListFragment extends Fragment
 
         if (item.getGroupId() == R.id.sort_by) {
             SortBy previousSortBy = sortBy;
-
-            if (itemId == R.id.most_popular) {
-                sortBy = SortBy.MOST_POPULAR;
-            } else {
-                sortBy = SortBy.HIGHEST_RATED;
+    
+            switch (itemId) {
+                case R.id.most_popular:
+                    sortBy = MOST_POPULAR;
+                    break;
+                case R.id.highest_rated:
+                    sortBy = HIGHEST_RATED;
+                    break;
+                case R.id.favorites:
+                    sortBy = FAVORITES;
+                    break;
             }
 
             // Sorting order has not changed, therefore their is no need to reload movies
@@ -123,9 +139,10 @@ public class MovieListFragment extends Fragment
             item.setChecked(true);
 
             loadMovies();
+                
             return true;
         }
-
+        
         return super.onOptionsItemSelected(item);
     }
 
@@ -136,6 +153,11 @@ public class MovieListFragment extends Fragment
     }
 
     private void loadMovies() {
+        // Not yet implemented
+        if (sortBy == SortBy.FAVORITES) {
+            return;
+        }
+        
         URL url = NetworkUtils.buildUrl(sortBy);
         new LoadMoviesTask().execute(url);
     }
