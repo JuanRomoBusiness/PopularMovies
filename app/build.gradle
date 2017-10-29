@@ -21,7 +21,7 @@ android {
     buildToolsVersion versions.buildTools
     defaultConfig {
         applicationId "io.romo.popularmovies"
-        minSdkVersion versions.targetSdk
+        minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
@@ -44,6 +44,9 @@ dependencies {
 
     compile "com.jakewharton:butterknife:${versions.butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butterknife}"
+
+    compile "com.squareup.retrofit2:retrofit:${versions.retrofit2}"
+    compile "com.squareup.retrofit2:converter-gson:${versions.retrofit2}"
 
     compile "com.squareup.picasso:picasso:${versions.picasso}"
 }

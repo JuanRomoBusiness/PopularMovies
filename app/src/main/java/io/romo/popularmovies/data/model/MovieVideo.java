@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.model;
+package io.romo.popularmovies.data.model;
 
-public class Review {
+public class MovieVideo {
     
     private String id;
-    private String author;
-    private String content;
+    private String name;
+    private String site;
+    private String key;
     
-    public Review() {
-        // Default constructor
-    }
-    
-    public Review(String id, String author, String content) {
-        this.id = id;
-        this.author = author;
-        this.content = content;
+    public MovieVideo() {
+        
     }
     
     public String getId() {
@@ -40,19 +35,27 @@ public class Review {
         this.id = id;
     }
     
-    public String getAuthor() {
-        return author;
+    public String getName() {
+        return name;
     }
     
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String getContent() {
-        return content;
+    public String getSite() {
+        return site;
     }
     
-    public void setContent(String content) {
-        this.content = content;
+    public void setSite(String site) {
+        this.site = site;
+    }
+    
+    public String getKey() {
+        return key;
+    }
+    
+    public void setKey(String key) {
+        this.key = key;
     }
 }

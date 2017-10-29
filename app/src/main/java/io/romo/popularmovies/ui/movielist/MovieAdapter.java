@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.movielist;
+package io.romo.popularmovies.ui.movielist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.model.Movie;
+import io.romo.popularmovies.data.model.Movie;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
@@ -84,7 +84,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public void bindMovie(Movie movie) {
             this.movie = movie;
             Context context = moviePoster.getContext();
-            Picasso.with(context).load(movie.getPosterPath())
+            Picasso.with(context).load("https://image.tmdb.org/t/p/w300" + movie.getPosterPath())
                     .placeholder(R.drawable.place_holder_w300)
                     .into(moviePoster);
         }

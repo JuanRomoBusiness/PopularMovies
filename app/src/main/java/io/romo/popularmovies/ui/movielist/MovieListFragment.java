@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.movielist;
+package io.romo.popularmovies.ui.movielist;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,21 +30,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.net.URL;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.model.Movie;
-import io.romo.popularmovies.model.SortBy;
-import io.romo.popularmovies.moviedetails.MovieDetailsActivity;
-import io.romo.popularmovies.util.JsonUtils;
-import io.romo.popularmovies.util.NetworkUtils;
+import io.romo.popularmovies.data.model.Movie;
+import io.romo.popularmovies.data.remote.request.MovieService;
+import io.romo.popularmovies.data.remote.request.ServiceGenerator;
+import io.romo.popularmovies.data.remote.response.MovieResponse;
+import io.romo.popularmovies.ui.moviedetail.MovieDetailActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static io.romo.popularmovies.model.SortBy.FAVORITES;
-import static io.romo.popularmovies.model.SortBy.HIGHEST_RATED;
-import static io.romo.popularmovies.model.SortBy.MOST_POPULAR;
+import static io.romo.popularmovies.ui.movielist.SortBy.FAVORITES;
+import static io.romo.popularmovies.ui.movielist.SortBy.HIGHEST_RATED;
+import static io.romo.popularmovies.ui.movielist.SortBy.MOST_POPULAR;
 
 public class MovieListFragment extends Fragment
         implements MovieAdapter.ListItemClickListener {
@@ -148,7 +147,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onListItemClick(Movie movie) {
-        Intent intent = MovieDetailsActivity.newIntent(getActivity(), movie);
+        Intent intent = MovieDetailActivity.newIntent(getActivity(), movie);
         startActivity(intent);
     }
 
@@ -157,9 +156,28 @@ public class MovieListFragment extends Fragment
         if (sortBy == SortBy.FAVORITES) {
             return;
         }
+    
+        MovieService movieService = ServiceGenerator.createService(MovieService.class);
+        Call<MovieResponse> call;
+        if (sortBy == SortBy.MOST_POPULAR) {
+            call = movieService.getPopularMovies();
+        } else {
+            call = movieService.getTopRatedMovies();
+        }
         
-        URL url = NetworkUtils.buildUrl(sortBy);
-        new LoadMoviesTask().execute(url);
+        call.enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                showMovies();
+                adapter.setMovieList(response.body().getResults());
+                movies.getLayoutManager().scrollToPosition(0);
+            }
+    
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                showErrorMessage();
+            }
+        });
     }
 
     private void showMovies() {
@@ -170,42 +188,5 @@ public class MovieListFragment extends Fragment
     private void showErrorMessage() {
         movies.setVisibility(View.INVISIBLE);
         errorMessage.setVisibility(View.VISIBLE);
-    }
-
-    private class LoadMoviesTask extends AsyncTask<URL, Void, List<Movie>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<Movie> doInBackground(URL... urls) {
-            URL url = urls[0];
-
-            List<Movie> movieList = null;
-
-            try {
-                String response = NetworkUtils.getResponseFromHttpUrl(url);
-                movieList = JsonUtils.getMovies(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return movieList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movieList) {
-            progressBar.setVisibility(View.INVISIBLE);
-            if (movieList != null) {
-                showMovies();
-                adapter.setMovieList(movieList);
-                movies.getLayoutManager().scrollToPosition(0);
-            } else {
-                showErrorMessage();
-            }
-        }
     }
 }

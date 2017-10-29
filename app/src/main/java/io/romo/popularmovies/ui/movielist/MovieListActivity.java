@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.movielist;
+package io.romo.popularmovies.ui.movielist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

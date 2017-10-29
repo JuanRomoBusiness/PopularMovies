@@ -25,4 +25,10 @@
 
     <string name="error_message">Failed to get results</string>
 
+    <string name="overview">Overview</string>
+    <string name="videos">Videos</string>
+    <string name="reviews">Reviews</string>
+
+    <string name="read_full_review">Read Full Review</string>
+
 </resources>

@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.model;
+package io.romo.popularmovies.ui.movielist;
 
 public enum SortBy {MOST_POPULAR, HIGHEST_RATED, FAVORITES}

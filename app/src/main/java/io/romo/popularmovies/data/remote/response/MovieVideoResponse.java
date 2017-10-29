@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-buildscript {
+package io.romo.popularmovies.data.remote.response;
 
-    ext.versions = [
-            'minSdk'        : 21,
-            'compileSdk'    : 26,
-            'targetSdk'     : 26,
-            'buildTools'    : '26.0.2',
-            'supportLibrary': '26.1.0',
-            'constraint'    : '1.0.2',
-            'butterknife'   : '8.8.1',
-            'retrofit2'      : '2.3.0',
-            'picasso'       : '2.5.2'
-    ]
+import java.util.List;
+
+import io.romo.popularmovies.data.model.MovieVideo;
+
+public class MovieVideoResponse {
     
-    repositories {
-        google()
-        jcenter()
+    private int id;
+    private List<MovieVideo> results;
+    
+    public MovieVideoResponse() {
+        
     }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+    
+    public int getId() {
+        return id;
     }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public List<MovieVideo> getResults() {
+        return results;
+    }
+    
+    public void setResults(List<MovieVideo> results) {
+        this.results = results;
     }
 }
