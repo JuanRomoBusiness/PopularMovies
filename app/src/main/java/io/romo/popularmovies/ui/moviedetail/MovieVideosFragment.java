@@ -35,24 +35,25 @@ import io.romo.popularmovies.data.model.MovieVideo;
 import io.romo.popularmovies.data.remote.request.MovieService;
 import io.romo.popularmovies.data.remote.request.ServiceGenerator;
 import io.romo.popularmovies.data.remote.response.MovieVideoResponse;
+import io.romo.popularmovies.util.NetworkUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieVideoFragment extends Fragment implements Callback<MovieVideoResponse> {
+public class MovieVideosFragment extends Fragment implements Callback<MovieVideoResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
     
-    @BindView(R.id.videos) RecyclerView videos;
+    @BindView(R.id.movie_videos) RecyclerView videos;
     private MovieVideoAdapter adapter;
     
     private int movieId;
     
-    public static MovieVideoFragment newInstance(int movieId) {
+    public static MovieVideosFragment newInstance(int movieId) {
         Bundle args = new Bundle();
         args.putInt(ARG_MOVIE_ID, movieId);
         
-        MovieVideoFragment fragment = new MovieVideoFragment();
+        MovieVideosFragment fragment = new MovieVideosFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +66,7 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_videos, container, false);
+        View v = inflater.inflate(R.layout.fragment_movie_videos, container, false);
         ButterKnife.bind(this, v);
         
         videos.setHasFixedSize(true);
@@ -82,15 +83,20 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
         MovieService service = ServiceGenerator.createService(MovieService.class);
     
         Call<MovieVideoResponse> call = service.getMovieVideos(movieId);
+        
         call.enqueue(this);
         
         return v;
     }
     
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onResponse(Call<MovieVideoResponse> call, Response<MovieVideoResponse> response) {
-        // TODO: Use the movie video list and display it
-        adapter.replaceData(response.body().getResults());
+        if (response.isSuccessful()) {
+            adapter.replaceData(response.body().getResults());
+        } else {
+            // TODO: Handle error
+        }
     }
     
     @Override
@@ -98,24 +104,24 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
         // TODO: Handle error
     }
     
-    private VideoItemListener itemListener = new VideoItemListener() {
+    private MovieVideoItemListener itemListener = new MovieVideoItemListener() {
         @Override
-        public void onVideoClick(MovieVideo clickedVideo) {
-            // TODO: Play Youtube video
+        public void onMovieVideoClick(MovieVideo clickedMovieVideo) {
+            NetworkUtils.watchYoutubeVideo(getActivity(), clickedMovieVideo.getKey());
         }
     };
     
     static class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoViewHolder> {
         
-        private List<MovieVideo> videoList;
-        private VideoItemListener itemListener;
+        private List<MovieVideo> movieVideoList;
+        private MovieVideoItemListener itemListener;
         
-        public MovieVideoAdapter(VideoItemListener itemListener) {
+        public MovieVideoAdapter(MovieVideoItemListener itemListener) {
             this.itemListener = itemListener;
         }
         
-        public void replaceData(List<MovieVideo> videoList) {
-            this.videoList = videoList;
+        public void replaceData(List<MovieVideo> movieVideoList) {
+            this.movieVideoList = movieVideoList;
             notifyDataSetChanged();
         }
         
@@ -128,13 +134,13 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
         
         @Override
         public void onBindViewHolder(MovieVideoViewHolder holder, int position) {
-            MovieVideo video = videoList.get(position);
-            holder.bind(video, itemListener);
+            MovieVideo movieVideo = movieVideoList.get(position);
+            holder.bind(movieVideo, itemListener);
         }
         
         @Override
         public int getItemCount() {
-            return videoList == null ? 0 : videoList.size();
+            return movieVideoList == null ? 0 : movieVideoList.size();
         }
     }
     
@@ -143,8 +149,8 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
         
         @BindView(R.id.name) TextView name;
         
-        private MovieVideo video;
-        private VideoItemListener itemListener;
+        private MovieVideo movieVideo;
+        private MovieVideoItemListener itemListener;
         
         public MovieVideoViewHolder(View itemView) {
             super(itemView);
@@ -153,8 +159,8 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
             itemView.setOnClickListener(this);
         }
         
-        public void bind(MovieVideo video, VideoItemListener itemListener) {
-            this.video = video;
+        public void bind(MovieVideo video, MovieVideoItemListener itemListener) {
+            this.movieVideo = video;
             this.itemListener = itemListener;
             
             name.setText(video.getName());
@@ -162,12 +168,12 @@ public class MovieVideoFragment extends Fragment implements Callback<MovieVideoR
         
         @Override
         public void onClick(View view) {
-            itemListener.onVideoClick(video);
+            itemListener.onMovieVideoClick(movieVideo);
         }
     }
     
-    private interface VideoItemListener {
+    private interface MovieVideoItemListener {
         
-        void onVideoClick(MovieVideo clickedVideo);
+        void onMovieVideoClick(MovieVideo clickedMovieVideo);
     }
 }

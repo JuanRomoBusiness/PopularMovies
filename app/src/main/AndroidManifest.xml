@@ -29,7 +29,7 @@
         android:theme="@style/PopularMovies">
 
         <activity
-            android:name=".ui.movielist.MovieListActivity"
+            android:name=".ui.movielist.MoviesActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
 
         <activity
             android:name=".ui.moviedetail.MovieDetailActivity"
-            android:parentActivityName=".ui.movielist.MovieListActivity">
+            android:parentActivityName=".ui.movielist.MoviesActivity">
         </activity>
 
     </application>

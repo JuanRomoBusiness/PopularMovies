@@ -22,14 +22,50 @@ import android.net.Uri;
 
 public class NetworkUtils {
     
-    public static void watchYoutubeVideo(Context context, String key) {
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+    public enum ImageSize {
+        MOBILE("w185"),
+        SMALL("w300"),
+        MEDIUM("w500"),
+        LARGE("w780");
+        
+        private String imagePath;
+        
+        ImageSize(String imagePath) {
+            this.imagePath = imagePath;
+        }
+        
+        public String getImagePath() {
+            return imagePath;
+        }
+    }
+    
+    public static String createImageUrl(String filePath, ImageSize imageSize) {
+        Uri uri = new Uri.Builder().scheme("https")
+                .authority("image.tmdb.org")
+                .appendPath("t")
+                .appendPath("p")
+                .appendPath(imageSize.getImagePath())
+                .appendEncodedPath(filePath)
+                .build();
+        return uri.toString();
+    }
+    
+    public static void watchYoutubeVideo(Context context, String id) {
+        
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
         if (appIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(appIntent);
         } else {
-            Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                                         Uri.parse("http://www.youtube.com/watch?v=" + key));
-            context.startActivity(webIntent);
+            Uri uri = new Uri.Builder().scheme("https")
+                    .authority("www.youtube.com")
+                    .appendPath("watch")
+                    .appendQueryParameter("v", id)
+                    .build();
+            
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, uri);
+            if (webIntent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(webIntent);
+            }
         }
     }
 }

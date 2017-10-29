@@ -25,24 +25,24 @@ import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
 import io.romo.popularmovies.util.ActivityUtils;
 
-public class MovieListActivity extends AppCompatActivity {
+public class MoviesActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_list);
+        setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
 
-        MovieListFragment movieListFragment =
-                (MovieListFragment) getSupportFragmentManager().findFragmentById(R.id.movie_list_container);
-        if (movieListFragment == null) {
-            movieListFragment = new MovieListFragment();
+        MoviesFragment moviesFragment =
+                (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.movies_container);
+        if (moviesFragment == null) {
+            moviesFragment = new MoviesFragment();
             ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), movieListFragment, R.id.movie_list_container);
+                    getSupportFragmentManager(), moviesFragment, R.id.movies_container);
         }
     }
 }

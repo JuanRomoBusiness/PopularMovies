@@ -16,6 +16,8 @@
 
 package io.romo.popularmovies.ui.moviedetail;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -41,20 +43,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReviewsFragment extends Fragment implements Callback<MovieReviewResponse> {
+public class MovieReviewsFragment extends Fragment implements Callback<MovieReviewResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
     
-    @BindView(R.id.reviews) RecyclerView reviews;
+    @BindView(R.id.movie_reviews) RecyclerView movieReviews;
     private MovieReviewAdapter adapter;
     
     private int movieId;
     
-    public static ReviewsFragment newInstance(int movieId) {
+    public static MovieReviewsFragment newInstance(int movieId) {
         Bundle args = new Bundle();
         args.putInt(ARG_MOVIE_ID, movieId);
         
-        ReviewsFragment fragment = new ReviewsFragment();
+        MovieReviewsFragment fragment = new MovieReviewsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,32 +69,37 @@ public class ReviewsFragment extends Fragment implements Callback<MovieReviewRes
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_reviews, container, false);
+        View v = inflater.inflate(R.layout.fragment_movie_reviews, container, false);
         ButterKnife.bind(this, v);
         
-        reviews.setHasFixedSize(true);
+        movieReviews.setHasFixedSize(true);
         
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        reviews.setLayoutManager(layoutManager);
+        movieReviews.setLayoutManager(layoutManager);
         
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
-        reviews.addItemDecoration(divider);
+        movieReviews.addItemDecoration(divider);
         
         adapter = new MovieReviewAdapter(itemListener);
-        reviews.setAdapter(adapter);
+        movieReviews.setAdapter(adapter);
     
         MovieService service = ServiceGenerator.createService(MovieService.class);
     
         Call<MovieReviewResponse> call = service.getMovieReviews(movieId);
+        
         call.enqueue(this);
         
         return v;
     }
     
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onResponse(Call<MovieReviewResponse> call, Response<MovieReviewResponse> response) {
-        // TODO: Use the movie review list and display it
-        adapter.replaceData(response.body().getResults());
+        if (response.isSuccessful()) {
+            adapter.replaceData(response.body().getResults());
+        } else {
+            // TODO: Handle error
+        }
     }
     
     @Override
@@ -100,24 +107,28 @@ public class ReviewsFragment extends Fragment implements Callback<MovieReviewRes
         // TODO: Handle error
     }
     
-    private ReviewItemListener itemListener = new ReviewItemListener() {
+    private MovieReviewItemListener itemListener = new MovieReviewItemListener() {
         @Override
-        public void onReviewClick(MovieReview clickedReview) {
-            // TODO Launch web browser
+        public void onMovieReviewClick(MovieReview clickedMovieReview) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(clickedMovieReview.getUrl()));
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
     };
     
     private static class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewViewHolder> {
         
-        private List<MovieReview> reviewList;
-        private ReviewItemListener itemListener;
+        private List<MovieReview> movieReviewList;
+        private MovieReviewItemListener itemListener;
         
-        public MovieReviewAdapter(ReviewItemListener itemListener) {
+        public MovieReviewAdapter(MovieReviewItemListener itemListener) {
             this.itemListener = itemListener;
         }
         
-        public void replaceData(List<MovieReview> reviewList) {
-            this.reviewList = reviewList;
+        public void replaceData(List<MovieReview> movieReviewList) {
+            this.movieReviewList = movieReviewList;
             notifyDataSetChanged();
         }
         
@@ -130,13 +141,13 @@ public class ReviewsFragment extends Fragment implements Callback<MovieReviewRes
         
         @Override
         public void onBindViewHolder(MovieReviewViewHolder holder, int position) {
-            MovieReview review = reviewList.get(position);
+            MovieReview review = movieReviewList.get(position);
             holder.bind(review, itemListener);
         }
         
         @Override
         public int getItemCount() {
-            return reviewList == null ? 0 : reviewList.size();
+            return movieReviewList == null ? 0 : movieReviewList.size();
         }
     }
     
@@ -147,14 +158,14 @@ public class ReviewsFragment extends Fragment implements Callback<MovieReviewRes
         @BindView(R.id.read_full_review) Button readFullReview;
         
         private MovieReview review;
-        private ReviewItemListener itemListener;
+        private MovieReviewItemListener itemListener;
         
         public MovieReviewViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
         
-        public void bind(MovieReview review, ReviewItemListener itemListener) {
+        public void bind(MovieReview review, MovieReviewItemListener itemListener) {
             this.review = review;
             this.itemListener = itemListener;
             
@@ -164,12 +175,12 @@ public class ReviewsFragment extends Fragment implements Callback<MovieReviewRes
         
         @OnClick(R.id.read_full_review)
         void readFullReviewOnClick() {
-            itemListener.onReviewClick(review);
+            itemListener.onMovieReviewClick(review);
         }
     }
     
-    private interface ReviewItemListener {
+    private interface MovieReviewItemListener {
         
-        void onReviewClick(MovieReview clickedReview);
+        void onMovieReviewClick(MovieReview clickedMovieReview);
     }
 }

@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -37,21 +36,24 @@ import io.romo.popularmovies.R;
 import io.romo.popularmovies.data.model.Movie;
 
 public class MovieDetailActivity extends AppCompatActivity {
-
+    
+    private static final int PAGE_LIMIT = 2;
+    
     private static final String EXTRA_MOVIE = "io.romo.popularmovies.movie";
-
+    
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.view_pager) ViewPager viewPager;
     
     private Movie movie;
-
+    
     public static Intent newIntent(Context packageContext, Movie movie) {
         Intent intent = new Intent(packageContext, MovieDetailActivity.class);
         intent.putExtra(EXTRA_MOVIE, movie);
         return intent;
     }
-
+    
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,54 +65,51 @@ public class MovieDetailActivity extends AppCompatActivity {
         toolbar.setTitle(movie.getTitle());
         
         setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-            viewPager.setOffscreenPageLimit(2);
-        }
+        
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        setupViewPager(viewPager);
+        
+        viewPager.setOffscreenPageLimit(PAGE_LIMIT);
+        
         tabLayout.setupWithViewPager(viewPager);
     }
     
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(OverviewFragment.newInstance(movie.getOverview()),
+        adapter.addFragment(MovieOverviewFragment.newInstance(movie.getOverview()),
                             getString(R.string.overview));
-        adapter.addFragment(MovieVideoFragment.newInstance(movie.getId()),
+        adapter.addFragment(MovieVideosFragment.newInstance(movie.getId()),
                             getString(R.string.videos));
-        adapter.addFragment(ReviewsFragment.newInstance(movie.getId()),
+        adapter.addFragment(MovieReviewsFragment.newInstance(movie.getId()),
                             getString(R.string.reviews));
         viewPager.setAdapter(adapter);
     }
     
     private static class ViewPagerAdapter extends FragmentPagerAdapter {
-    
+        
         private List<Fragment> fragments = new ArrayList<>();
         private List<String> fragmentTitles = new ArrayList<>();
-    
+        
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-    
+        
         public void addFragment(Fragment fragment, String title) {
             fragments.add(fragment);
             fragmentTitles.add(title);
         }
-    
+        
         @Override
         public Fragment getItem(int position) {
             return fragments.get(position);
         }
-    
+        
         @Override
         public int getCount() {
             return fragments.size();
         }
-    
+        
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentTitles.get(position);

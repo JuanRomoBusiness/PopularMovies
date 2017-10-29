@@ -27,8 +27,8 @@ public class Movie implements Parcelable {
     
     private int id;
     private String title;
-    private double voteAverage;
     private String releaseDate;
+    private double voteAverage;
     private int voteCount;
     private double popularity;
     private String overview;
@@ -60,20 +60,20 @@ public class Movie implements Parcelable {
         this.title = title;
     }
     
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-    
-    public void setVoteAverage(double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-    
     public String getReleaseDate() {
         return releaseDate;
     }
     
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+    
+    public double getVoteAverage() {
+        return voteAverage;
+    }
+    
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
     }
     
     public int getVoteCount() {
