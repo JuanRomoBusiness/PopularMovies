@@ -250,7 +250,7 @@ public class MoviesFragment extends Fragment implements Callback<MovieResponse> 
             Context context = moviePoster.getContext();
             Picasso.with(context).load(NetworkUtils.createImageUrl(movie.getPosterPath(),
                                                                    NetworkUtils.ImageSize.SMALL))
-                    .placeholder(R.drawable.place_holder_w300)
+                    .placeholder(R.drawable.poster_place_holder_w300)
                     .into(moviePoster);
         }
         

@@ -19,6 +19,8 @@ package io.romo.popularmovies.ui.moviedetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,14 +28,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
 import io.romo.popularmovies.data.model.Movie;
+import io.romo.popularmovies.util.NetworkUtils;
 
 public class MovieDetailActivity extends AppCompatActivity {
     
@@ -41,7 +54,15 @@ public class MovieDetailActivity extends AppCompatActivity {
     
     private static final String EXTRA_MOVIE = "io.romo.popularmovies.movie";
     
+    @BindView(R.id.appbar) AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.backdrop) ImageView backdrop;
+    @BindView(R.id.poster) ImageView poster;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.release_date) TextView releaseDate;
+    @BindView(R.id.vote_average) RatingBar voteAverage;
+    @BindView(R.id.vote_count) TextView voteCount;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.view_pager) ViewPager viewPager;
     
@@ -62,11 +83,30 @@ public class MovieDetailActivity extends AppCompatActivity {
         
         movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         
-        toolbar.setTitle(movie.getTitle());
-        
         setSupportActionBar(toolbar);
         
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+    
+        Picasso.with(this).load(NetworkUtils.createImageUrl(movie.getBackdropPath(), NetworkUtils.ImageSize.LARGE))
+                .placeholder(R.drawable.backdrop_place_holder_w780)
+                .into(backdrop);
+    
+        Picasso.with(this).load(NetworkUtils.createImageUrl(movie.getPosterPath(), NetworkUtils.ImageSize.SMALL))
+                .placeholder(R.drawable.poster_place_holder_w300)
+                .into(poster);
+        
+        title.setText(movie.getTitle());
+        SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = currentFormat.parse(movie.getReleaseDate());
+            SimpleDateFormat newFormat = new SimpleDateFormat("MMMM d, yyyy");
+            releaseDate.setText(newFormat.format(date));
+        } catch (ParseException e) {
+            releaseDate.setText(movie.getReleaseDate());
+        }
+        voteAverage.setRating((float) (movie.getVoteAverage() / 2));
+        voteCount.setText(NumberFormat.getNumberInstance(Locale.US).format(movie.getVoteCount()) + " Ratings");
         
         setupViewPager(viewPager);
         

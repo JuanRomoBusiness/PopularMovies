@@ -30,7 +30,8 @@
 
         <activity
             android:name=".ui.movielist.MoviesActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +41,9 @@
 
         <activity
             android:name=".ui.moviedetail.MovieDetailActivity"
-            android:parentActivityName=".ui.movielist.MoviesActivity">
+            android:parentActivityName=".ui.movielist.MoviesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PopularMovies.TranslucentStatus">
         </activity>
 
     </application>
