@@ -87,7 +87,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
-    
+        collapsingToolbar.setTitle(movie.getTitle());
+        
         Picasso.with(this).load(NetworkUtils.createImageUrl(movie.getBackdropPath(), NetworkUtils.ImageSize.LARGE))
                 .placeholder(R.drawable.backdrop_place_holder_w780)
                 .into(backdrop);

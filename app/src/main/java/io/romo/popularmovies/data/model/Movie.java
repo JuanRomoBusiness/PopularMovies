@@ -33,8 +33,8 @@ public class Movie implements Parcelable {
     private double popularity;
     private String overview;
     private boolean video;
-    @Nullable private String posterPath; // Encoded path
-    @Nullable private String backdropPath; // Encoded path
+    @Nullable private String posterPath;
+    @Nullable private String backdropPath;
     private String originalTitle;
     private String originalLanguage;
     private List<Integer> genreIds;

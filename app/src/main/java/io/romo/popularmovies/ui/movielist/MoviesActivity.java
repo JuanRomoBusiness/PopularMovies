@@ -16,27 +16,21 @@
 
 package io.romo.popularmovies.ui.movielist;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
 import io.romo.popularmovies.util.ActivityUtils;
 
 public class MoviesActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
-
+        
         MoviesFragment moviesFragment =
                 (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.movies_container);
         if (moviesFragment == null) {
