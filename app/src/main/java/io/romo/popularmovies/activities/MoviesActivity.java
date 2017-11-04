@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.movielist;
+package io.romo.popularmovies.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
+import io.romo.popularmovies.fragments.MoviesFragment;
 import io.romo.popularmovies.util.ActivityUtils;
 
 public class MoviesActivity extends AppCompatActivity {
@@ -29,8 +29,7 @@ public class MoviesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
-        ButterKnife.bind(this);
-        
+
         MoviesFragment moviesFragment =
                 (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.movies_container);
         if (moviesFragment == null) {

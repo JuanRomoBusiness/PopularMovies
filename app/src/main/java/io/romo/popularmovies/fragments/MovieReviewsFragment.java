@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.moviedetail;
+package io.romo.popularmovies.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -35,15 +35,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.data.model.MovieReview;
-import io.romo.popularmovies.data.remote.request.MovieService;
-import io.romo.popularmovies.data.remote.request.ServiceGenerator;
-import io.romo.popularmovies.data.remote.response.MovieReviewResponse;
+import io.romo.popularmovies.model.MovieReview;
+import io.romo.popularmovies.rest.service.TheMovieDbService;
+import io.romo.popularmovies.rest.TheMovieDbClient;
+import io.romo.popularmovies.rest.model.MovieReviewsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieReviewsFragment extends Fragment implements Callback<MovieReviewResponse> {
+public class MovieReviewsFragment extends Fragment implements Callback<MovieReviewsResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
     
@@ -83,9 +83,9 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         adapter = new MovieReviewAdapter(itemListener);
         movieReviews.setAdapter(adapter);
     
-        MovieService service = ServiceGenerator.createService(MovieService.class);
+        TheMovieDbService service = TheMovieDbClient.createService(TheMovieDbService.class);
     
-        Call<MovieReviewResponse> call = service.getMovieReviews(movieId);
+        Call<MovieReviewsResponse> call = service.getMovieReviews(movieId);
         
         call.enqueue(this);
         
@@ -94,7 +94,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
     
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onResponse(Call<MovieReviewResponse> call, Response<MovieReviewResponse> response) {
+    public void onResponse(Call<MovieReviewsResponse> call, Response<MovieReviewsResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
         } else {
@@ -103,7 +103,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
     }
     
     @Override
-    public void onFailure(Call<MovieReviewResponse> call, Throwable t) {
+    public void onFailure(Call<MovieReviewsResponse> call, Throwable t) {
         // TODO: Handle error
     }
     

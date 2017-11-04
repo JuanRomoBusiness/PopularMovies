@@ -14,51 +14,51 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.data.remote.response;
+package io.romo.popularmovies.rest.model;
 
 import java.util.List;
 
-import io.romo.popularmovies.data.model.Movie;
+import io.romo.popularmovies.model.Movie;
 
-public class MovieResponse {
-    
+public class MoviesResponse {
+
     private int page;
     private List<Movie> results;
     private int totalPages;
     private int totalResults;
-    
-    public MovieResponse() {
-        
+
+    public MoviesResponse() {
+
     }
-    
+
     public int getPage() {
         return page;
     }
-    
+
     public void setPage(int page) {
         this.page = page;
     }
-    
+
     public List<Movie> getResults() {
         return results;
     }
-    
+
     public void setResults(List<Movie> results) {
         this.results = results;
     }
-    
+
     public int getTotalPages() {
         return totalPages;
     }
-    
+
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-    
+
     public int getTotalResults() {
         return totalResults;
     }
-    
+
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }

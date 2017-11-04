@@ -14,6 +14,34 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.movielist;
+package io.romo.popularmovies.rest.model;
 
-public enum SortBy {MOST_POPULAR, HIGHEST_RATED, FAVORITES}
+import java.util.List;
+
+import io.romo.popularmovies.model.MovieVideo;
+
+public class MovieVideosResponse {
+
+    private int id;
+    private List<MovieVideo> results;
+
+    public MovieVideosResponse() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<MovieVideo> getResults() {
+        return results;
+    }
+
+    public void setResults(List<MovieVideo> results) {
+        this.results = results;
+    }
+}

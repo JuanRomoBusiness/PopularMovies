@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.moviedetail;
+package io.romo.popularmovies.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +45,10 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.data.model.Movie;
+import io.romo.popularmovies.model.Movie;
+import io.romo.popularmovies.fragments.MovieOverviewFragment;
+import io.romo.popularmovies.fragments.MovieReviewsFragment;
+import io.romo.popularmovies.fragments.MovieVideosFragment;
 import io.romo.popularmovies.util.NetworkUtils;
 
 public class MovieDetailActivity extends AppCompatActivity {

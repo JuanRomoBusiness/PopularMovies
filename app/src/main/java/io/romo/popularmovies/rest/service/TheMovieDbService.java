@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.data.remote.request;
+package io.romo.popularmovies.rest.service;
 
-import io.romo.popularmovies.data.remote.response.MovieResponse;
-import io.romo.popularmovies.data.remote.response.MovieReviewResponse;
-import io.romo.popularmovies.data.remote.response.MovieVideoResponse;
+import io.romo.popularmovies.rest.model.MoviesResponse;
+import io.romo.popularmovies.rest.model.MovieReviewsResponse;
+import io.romo.popularmovies.rest.model.MovieVideosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface MovieService {
-    
+public interface TheMovieDbService {
+
     @GET("movie/popular")
-    Call<MovieResponse> getPopularMovies();
-    
+    Call<MoviesResponse> getPopularMovies();
+
     @GET("movie/top_rated")
-    Call<MovieResponse> getTopRatedMovies();
-    
+    Call<MoviesResponse> getTopRatedMovies();
+
     @GET("movie/{movie_id}/videos")
-    Call<MovieVideoResponse> getMovieVideos(@Path("movie_id") int movieId);
-    
+    Call<MovieVideosResponse> getMovieVideos(@Path("movie_id") int movieId);
+
     @GET("movie/{movie_id}/reviews")
-    Call<MovieReviewResponse> getMovieReviews(@Path("movie_id") int movieId);
+    Call<MovieReviewsResponse> getMovieReviews(@Path("movie_id") int movieId);
 }

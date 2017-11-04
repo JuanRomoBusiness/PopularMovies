@@ -14,34 +14,48 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.data.remote.response;
+package io.romo.popularmovies.model;
 
-import java.util.List;
+public class MovieReview {
 
-import io.romo.popularmovies.data.model.MovieVideo;
+    private String id;
+    private String author;
+    private String content;
+    private String url;
 
-public class MovieVideoResponse {
-    
-    private int id;
-    private List<MovieVideo> results;
-    
-    public MovieVideoResponse() {
-        
+    public MovieReview() {
+
     }
-    
-    public int getId() {
+
+    public String getId() {
         return id;
     }
-    
-    public void setId(int id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-    
-    public List<MovieVideo> getResults() {
-        return results;
+
+    public String getAuthor() {
+        return author;
     }
-    
-    public void setResults(List<MovieVideo> results) {
-        this.results = results;
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

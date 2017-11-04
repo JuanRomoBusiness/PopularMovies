@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.moviedetail;
+package io.romo.popularmovies.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,16 +31,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.data.model.MovieVideo;
-import io.romo.popularmovies.data.remote.request.MovieService;
-import io.romo.popularmovies.data.remote.request.ServiceGenerator;
-import io.romo.popularmovies.data.remote.response.MovieVideoResponse;
+import io.romo.popularmovies.model.MovieVideo;
+import io.romo.popularmovies.rest.service.TheMovieDbService;
+import io.romo.popularmovies.rest.TheMovieDbClient;
+import io.romo.popularmovies.rest.model.MovieVideosResponse;
 import io.romo.popularmovies.util.NetworkUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieVideosFragment extends Fragment implements Callback<MovieVideoResponse> {
+public class MovieVideosFragment extends Fragment implements Callback<MovieVideosResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
     
@@ -80,9 +80,9 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         adapter = new MovieVideoAdapter(itemListener);
         videos.setAdapter(adapter);
     
-        MovieService service = ServiceGenerator.createService(MovieService.class);
+        TheMovieDbService service = TheMovieDbClient.createService(TheMovieDbService.class);
     
-        Call<MovieVideoResponse> call = service.getMovieVideos(movieId);
+        Call<MovieVideosResponse> call = service.getMovieVideos(movieId);
         
         call.enqueue(this);
         
@@ -91,7 +91,7 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
     
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onResponse(Call<MovieVideoResponse> call, Response<MovieVideoResponse> response) {
+    public void onResponse(Call<MovieVideosResponse> call, Response<MovieVideosResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
         } else {
@@ -100,7 +100,7 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
     }
     
     @Override
-    public void onFailure(Call<MovieVideoResponse> call, Throwable t) {
+    public void onFailure(Call<MovieVideosResponse> call, Throwable t) {
         // TODO: Handle error
     }
     

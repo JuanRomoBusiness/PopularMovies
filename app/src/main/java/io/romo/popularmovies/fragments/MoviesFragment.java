@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.movielist;
+package io.romo.popularmovies.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -38,21 +38,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
-import io.romo.popularmovies.data.model.Movie;
-import io.romo.popularmovies.data.remote.request.MovieService;
-import io.romo.popularmovies.data.remote.request.ServiceGenerator;
-import io.romo.popularmovies.data.remote.response.MovieResponse;
-import io.romo.popularmovies.ui.moviedetail.MovieDetailActivity;
+import io.romo.popularmovies.model.Movie;
+import io.romo.popularmovies.rest.service.TheMovieDbService;
+import io.romo.popularmovies.rest.TheMovieDbClient;
+import io.romo.popularmovies.rest.model.MoviesResponse;
+import io.romo.popularmovies.activities.MovieDetailActivity;
 import io.romo.popularmovies.util.NetworkUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static io.romo.popularmovies.ui.movielist.SortBy.FAVORITES;
-import static io.romo.popularmovies.ui.movielist.SortBy.HIGHEST_RATED;
-import static io.romo.popularmovies.ui.movielist.SortBy.MOST_POPULAR;
 
-public class MoviesFragment extends Fragment implements Callback<MovieResponse> {
+public class MoviesFragment extends Fragment implements Callback<MoviesResponse> {
+
+    public enum SortBy {MOST_POPULAR, HIGHEST_RATED, FAVORITES}
     
     private static final String STATE_SORT_BY = "sort_by";
     
@@ -60,7 +59,7 @@ public class MoviesFragment extends Fragment implements Callback<MovieResponse> 
     private MovieAdapter adapter;
     
     // By default movies are sorted by most popular
-    private SortBy sortBy = MOST_POPULAR;
+    private SortBy sortBy = SortBy.MOST_POPULAR;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,13 +123,13 @@ public class MoviesFragment extends Fragment implements Callback<MovieResponse> 
             
             switch (itemId) {
                 case R.id.most_popular:
-                    sortBy = MOST_POPULAR;
+                    sortBy = SortBy.MOST_POPULAR;
                     break;
                 case R.id.highest_rated:
-                    sortBy = HIGHEST_RATED;
+                    sortBy = SortBy.HIGHEST_RATED;
                     break;
                 case R.id.favorites:
-                    sortBy = FAVORITES;
+                    sortBy = SortBy.FAVORITES;
                     break;
             }
             
@@ -150,7 +149,7 @@ public class MoviesFragment extends Fragment implements Callback<MovieResponse> 
     
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+    public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
             
@@ -161,14 +160,14 @@ public class MoviesFragment extends Fragment implements Callback<MovieResponse> 
     }
     
     @Override
-    public void onFailure(Call<MovieResponse> call, Throwable t) {
+    public void onFailure(Call<MoviesResponse> call, Throwable t) {
         // TODO: Handle error
     }
     
     private void loadMovies() {
-        Call<MovieResponse> call = null;
+        Call<MoviesResponse> call = null;
     
-        MovieService service = ServiceGenerator.createService(MovieService.class);
+        TheMovieDbService service = TheMovieDbClient.createService(TheMovieDbService.class);
     
         switch (sortBy) {
             case MOST_POPULAR:

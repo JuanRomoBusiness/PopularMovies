@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.ui.moviedetail;
+package io.romo.popularmovies.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
