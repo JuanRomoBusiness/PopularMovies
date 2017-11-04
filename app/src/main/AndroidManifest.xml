@@ -29,7 +29,6 @@
 
         <activity
             android:name=".activities.MoviesActivity"
-            android:theme="@style/PopularMovies.TranslucentStatus"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -34,7 +34,7 @@ import io.romo.popularmovies.R;
 import io.romo.popularmovies.model.MovieVideo;
 import io.romo.popularmovies.rest.service.TheMovieDbService;
 import io.romo.popularmovies.rest.TheMovieDbClient;
-import io.romo.popularmovies.rest.model.MovieVideosResponse;
+import io.romo.popularmovies.rest.response.MovieVideosResponse;
 import io.romo.popularmovies.util.NetworkUtils;
 import retrofit2.Call;
 import retrofit2.Callback;

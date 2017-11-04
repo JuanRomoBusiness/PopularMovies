@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2017 Juan Romo
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +14,11 @@
   ~ limitations under the License.
   -->
 
-<tabs>
-    <tabs>
-        <tab
-            id="@+id/tab_favorites"
-            icon="@drawable/ic_popular"
-            title="Popular" />
-        <tab
-            id="@+id/tab_nearby"
-            icon="@drawable/ic_favorite"
-            title="Favorites" />
-        <tab
-            id="@+id/tab_friends"
-            icon="@drawable/ic_top_rated"
-            title="Top Rated" />
-    </tabs>
-</tabs>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/ic_favorite_border"
+        android:title="@string/favorite"
+        app:showAsAction="ifRoom" />
+</menu>

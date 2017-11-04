@@ -36,7 +36,7 @@ public class TheMovieDbClient {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
 
     private final static String PARAM_API_KEY = "api_key";
-    private final static String API_KEY = BuildConfig.TMDb_API_KEY;
+    private final static String API_KEY = BuildConfig.TheMovieDb_API_KEY;
 
     private static Gson gson = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -51,26 +51,25 @@ public class TheMovieDbClient {
             new OkHttpClient.Builder().addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
-                    Request original = chain.request();
-                    HttpUrl httpUrl = original.url();
+                    Request request = chain.request();
+                    HttpUrl url = request.url();
 
-                    HttpUrl newHttpUrl = httpUrl.newBuilder()
+                    HttpUrl newUrl = url.newBuilder()
                             .addQueryParameter(PARAM_API_KEY, API_KEY)
                             .build();
 
-                    Request.Builder requestBuilder = original.newBuilder()
-                            .url(newHttpUrl);
+                    Request.Builder requestBuilder = request.newBuilder()
+                            .url(newUrl);
 
-                    Request request = requestBuilder.build();
+                    Request newRequest = requestBuilder.build();
 
-                    return chain.proceed(request);
+                    return chain.proceed(newRequest);
                 }
             }).build();
 
     private static Retrofit retrofit = builder.client(httpClient).build();
 
-    public static <S> S createService(
-            Class<S> serviceClass) {
+    public static <S> S createService(Class<S> serviceClass) {
         return retrofit.create(serviceClass);
     }
 }

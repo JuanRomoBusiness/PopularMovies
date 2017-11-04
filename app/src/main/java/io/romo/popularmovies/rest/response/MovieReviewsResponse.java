@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.romo.popularmovies.rest.model;
+package io.romo.popularmovies.rest.response;
 
 import java.util.List;
 

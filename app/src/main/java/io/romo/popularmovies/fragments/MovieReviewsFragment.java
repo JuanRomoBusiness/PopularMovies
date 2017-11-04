@@ -38,7 +38,7 @@ import io.romo.popularmovies.R;
 import io.romo.popularmovies.model.MovieReview;
 import io.romo.popularmovies.rest.service.TheMovieDbService;
 import io.romo.popularmovies.rest.TheMovieDbClient;
-import io.romo.popularmovies.rest.model.MovieReviewsResponse;
+import io.romo.popularmovies.rest.response.MovieReviewsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,12 +83,10 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         adapter = new MovieReviewAdapter(itemListener);
         movieReviews.setAdapter(adapter);
     
-        TheMovieDbService service = TheMovieDbClient.createService(TheMovieDbService.class);
-    
-        Call<MovieReviewsResponse> call = service.getMovieReviews(movieId);
-        
-        call.enqueue(this);
-        
+        TheMovieDbClient.createService(TheMovieDbService.class)
+                .getMovieReviews(movieId)
+                .enqueue(this);
+
         return v;
     }
     

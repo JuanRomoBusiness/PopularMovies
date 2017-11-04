@@ -28,5 +28,8 @@
     <string name="reviews">Reviews</string>
 
     <string name="read_full_review">Read Full Review</string>
+    
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
 
 </resources>

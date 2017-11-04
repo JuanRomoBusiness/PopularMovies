@@ -28,6 +28,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -117,6 +119,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(PAGE_LIMIT);
         
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_movie_details, menu);
+        return true;
     }
     
     private void setupViewPager(ViewPager viewPager) {

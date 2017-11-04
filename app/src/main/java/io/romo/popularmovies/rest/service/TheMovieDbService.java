@@ -16,9 +16,9 @@
 
 package io.romo.popularmovies.rest.service;
 
-import io.romo.popularmovies.rest.model.MoviesResponse;
-import io.romo.popularmovies.rest.model.MovieReviewsResponse;
-import io.romo.popularmovies.rest.model.MovieVideosResponse;
+import io.romo.popularmovies.rest.response.MoviesResponse;
+import io.romo.popularmovies.rest.response.MovieReviewsResponse;
+import io.romo.popularmovies.rest.response.MovieVideosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

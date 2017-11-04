@@ -26,7 +26,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "TMDb_API_KEY", TMDb_API_KEY)
+        buildConfigField("String", "TheMovieDb_API_KEY", TheMovieDb_API_KEY)
     }
     buildTypes {
         release {
@@ -49,6 +49,4 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:${versions.retrofit2}"
 
     compile "com.squareup.picasso:picasso:${versions.picasso}"
-
-    compile 'com.roughike:bottom-bar:2.3.1'
 }
