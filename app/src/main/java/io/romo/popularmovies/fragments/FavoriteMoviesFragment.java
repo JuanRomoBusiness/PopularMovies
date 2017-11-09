@@ -14,33 +14,21 @@
  * limitations under the License.
  */
 
-buildscript {
+package io.romo.popularmovies.fragments;
 
-    ext.versions = [
-            'minSdk'        : 21,
-            'compileSdk'    : 26,
-            'targetSdk'     : 26,
-            'buildTools'    : '26.0.2',
-            'supportLibrary': '26.0.0-beta1',
-            'constraint'    : '1.0.2',
-            'butterknife'   : '8.8.1',
-            'retrofit2'     : '2.3.0',
-            'picasso'       : '2.5.2'
-    ]
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-    repositories {
-        google()
-        jcenter()
-    }
+import io.romo.popularmovies.R;
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
-    }
-}
+public class FavoriteMoviesFragment extends Fragment {
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_favorite_movies, container, false);
+        return v;
     }
 }

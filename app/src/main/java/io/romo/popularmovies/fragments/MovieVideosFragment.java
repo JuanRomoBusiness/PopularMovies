@@ -44,8 +44,8 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
     
     private static final String ARG_MOVIE_ID = "movie_id";
     
-    @BindView(R.id.movie_videos) RecyclerView videos;
-    private MovieVideoAdapter adapter;
+    @BindView(R.id.movie_videos) RecyclerView movieVideos;
+    private MovieVideosAdapter adapter;
     
     private int movieId;
     
@@ -69,22 +69,20 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         View v = inflater.inflate(R.layout.fragment_movie_videos, container, false);
         ButterKnife.bind(this, v);
         
-        videos.setHasFixedSize(true);
+        movieVideos.setHasFixedSize(true);
         
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        videos.setLayoutManager(layoutManager);
+        movieVideos.setLayoutManager(layoutManager);
         
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
-        videos.addItemDecoration(divider);
+        movieVideos.addItemDecoration(divider);
         
-        adapter = new MovieVideoAdapter(itemListener);
-        videos.setAdapter(adapter);
+        adapter = new MovieVideosAdapter(itemListener);
+        movieVideos.setAdapter(adapter);
     
-        TheMovieDbService service = TheMovieDbClient.createService(TheMovieDbService.class);
-    
-        Call<MovieVideosResponse> call = service.getMovieVideos(movieId);
-        
-        call.enqueue(this);
+        TheMovieDbClient.createService(TheMovieDbService.class)
+                .getMovieVideos(movieId)
+                .enqueue(this);
         
         return v;
     }
@@ -111,12 +109,12 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         }
     };
     
-    static class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoViewHolder> {
+    static class MovieVideosAdapter extends RecyclerView.Adapter<MovieVideosViewHolder> {
         
         private List<MovieVideo> movieVideoList;
         private MovieVideoItemListener itemListener;
         
-        public MovieVideoAdapter(MovieVideoItemListener itemListener) {
+        public MovieVideosAdapter(MovieVideoItemListener itemListener) {
             this.itemListener = itemListener;
         }
         
@@ -126,14 +124,14 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         }
         
         @Override
-        public MovieVideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MovieVideosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_movie_video, parent, false);
-            return new MovieVideoViewHolder(v);
+            return new MovieVideosViewHolder(v);
         }
         
         @Override
-        public void onBindViewHolder(MovieVideoViewHolder holder, int position) {
+        public void onBindViewHolder(MovieVideosViewHolder holder, int position) {
             MovieVideo movieVideo = movieVideoList.get(position);
             holder.bind(movieVideo, itemListener);
         }
@@ -144,7 +142,7 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         }
     }
     
-    static class MovieVideoViewHolder extends RecyclerView.ViewHolder
+    static class MovieVideosViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         
         @BindView(R.id.name) TextView name;
@@ -152,7 +150,7 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         private MovieVideo movieVideo;
         private MovieVideoItemListener itemListener;
         
-        public MovieVideoViewHolder(View itemView) {
+        public MovieVideosViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             

@@ -48,7 +48,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
     private static final String ARG_MOVIE_ID = "movie_id";
     
     @BindView(R.id.movie_reviews) RecyclerView movieReviews;
-    private MovieReviewAdapter adapter;
+    private MovieReviewsAdapter adapter;
     
     private int movieId;
     
@@ -80,7 +80,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         movieReviews.addItemDecoration(divider);
         
-        adapter = new MovieReviewAdapter(itemListener);
+        adapter = new MovieReviewsAdapter(itemListener);
         movieReviews.setAdapter(adapter);
     
         TheMovieDbClient.createService(TheMovieDbService.class)
@@ -116,12 +116,12 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         }
     };
     
-    private static class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewViewHolder> {
+    private static class MovieReviewsAdapter extends RecyclerView.Adapter<MovieReviewsViewHolder> {
         
         private List<MovieReview> movieReviewList;
         private MovieReviewItemListener itemListener;
         
-        public MovieReviewAdapter(MovieReviewItemListener itemListener) {
+        public MovieReviewsAdapter(MovieReviewItemListener itemListener) {
             this.itemListener = itemListener;
         }
         
@@ -131,14 +131,14 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         }
         
         @Override
-        public MovieReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MovieReviewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_movie_review, parent, false);
-            return new MovieReviewViewHolder(v);
+            return new MovieReviewsViewHolder(v);
         }
         
         @Override
-        public void onBindViewHolder(MovieReviewViewHolder holder, int position) {
+        public void onBindViewHolder(MovieReviewsViewHolder holder, int position) {
             MovieReview review = movieReviewList.get(position);
             holder.bind(review, itemListener);
         }
@@ -149,7 +149,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         }
     }
     
-    static class MovieReviewViewHolder extends RecyclerView.ViewHolder {
+    static class MovieReviewsViewHolder extends RecyclerView.ViewHolder {
         
         @BindView(R.id.author) TextView author;
         @BindView(R.id.content) TextView content;
@@ -158,7 +158,7 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
         private MovieReview review;
         private MovieReviewItemListener itemListener;
         
-        public MovieReviewViewHolder(View itemView) {
+        public MovieReviewsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

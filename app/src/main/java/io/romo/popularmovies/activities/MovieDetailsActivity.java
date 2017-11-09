@@ -51,9 +51,8 @@ import io.romo.popularmovies.model.Movie;
 import io.romo.popularmovies.fragments.MovieOverviewFragment;
 import io.romo.popularmovies.fragments.MovieReviewsFragment;
 import io.romo.popularmovies.fragments.MovieVideosFragment;
-import io.romo.popularmovies.util.NetworkUtils;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity {
     
     private static final int PAGE_LIMIT = 2;
     
@@ -74,7 +73,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private Movie movie;
     
     public static Intent newIntent(Context packageContext, Movie movie) {
-        Intent intent = new Intent(packageContext, MovieDetailActivity.class);
+        Intent intent = new Intent(packageContext, MovieDetailsActivity.class);
         intent.putExtra(EXTRA_MOVIE, movie);
         return intent;
     }

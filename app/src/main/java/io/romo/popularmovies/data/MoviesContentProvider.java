@@ -92,7 +92,6 @@ public class MoviesContentProvider extends ContentProvider {
         Cursor retCursor;
 
         switch (match) {
-            // Query for the tasks directory
             case MOVIES:
                 retCursor = db.query(MovieEntry.TABLE_NAME,
                         projection,
@@ -112,7 +111,7 @@ public class MoviesContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = moviesDbHelper.getWritableDatabase();
 
         int match = uriMatcher.match(uri);
@@ -120,36 +119,40 @@ public class MoviesContentProvider extends ContentProvider {
 
         switch (match) {
             case MOVIE_WITH_ID:
-                // Get the task ID from the URI path
                 String id = uri.getPathSegments().get(1);
-                // Use selections/selectionArgs to filter for this ID
                 moviesDeleted = db.delete(MovieEntry.TABLE_NAME, "_id = ?", new String[]{id});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        // Notify the resolver of a change and return the number of items deleted
         if (moviesDeleted != 0) {
-            // A task was deleted, set notification
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
-        // Return the number of tasks deleted
         return moviesDeleted;
 
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
 
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
+        int match = uriMatcher.match(uri);
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        switch (match) {
+            case MOVIES:
+                return "vnd.android.cursor.dir" + "/" + MoviesContract.AUTHORITY + "/" + MoviesContract.PATH_MOVIES;
+            case MOVIE_WITH_ID:
+                return "vnd.android.cursor.item" + "/" + MoviesContract.AUTHORITY + "/" + MoviesContract.PATH_MOVIES;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 }
