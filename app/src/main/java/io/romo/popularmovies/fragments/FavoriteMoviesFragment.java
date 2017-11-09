@@ -16,19 +16,24 @@
 
 package io.romo.popularmovies.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
+import io.romo.popularmovies.activities.MovieDetailsActivity;
 import io.romo.popularmovies.data.MoviesContract;
 import io.romo.popularmovies.model.Movie;
 
@@ -44,8 +50,20 @@ public class FavoriteMoviesFragment extends Fragment implements
 
     private static final int MOVIE_LOADER_ID = 0;
 
+    private static final String SAVED_LIST_POSITION = "list_position";
+
     @BindView(R.id.favorite_movies) RecyclerView favoriteMovies;
-    FavoriteMoviesAdapter adapter;
+    private MoviesAdapter adapter;
+
+    private Parcelable savedListPosition;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            savedListPosition = savedInstanceState.getParcelable(SAVED_LIST_POSITION);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,13 +72,11 @@ public class FavoriteMoviesFragment extends Fragment implements
 
         favoriteMovies.setHasFixedSize(true);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        GridLayoutManager layoutManager =
+                new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.num_columns));
         favoriteMovies.setLayoutManager(layoutManager);
 
-        DividerItemDecoration divider = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
-        favoriteMovies.addItemDecoration(divider);
-
-        adapter = new FavoriteMoviesAdapter();
+        adapter = new MoviesAdapter(itemListener);
         favoriteMovies.setAdapter(adapter);
 
         getActivity().getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this);
@@ -72,6 +88,12 @@ public class FavoriteMoviesFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         getActivity().getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LIST_POSITION,
+                favoriteMovies.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -105,13 +127,24 @@ public class FavoriteMoviesFragment extends Fragment implements
                     while (cursor.moveToNext()) {
                         int idIndex = cursor.getColumnIndex(MoviesContract.MovieEntry._ID);
                         int titleIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE);
+                        int releaseDateIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE);
+                        int voteAverageIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+                        int voteCountIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_VOTE_COUNT);
+                        int overviewIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_OVERVIEW);
+                        int posterPathIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_PATH);
+                        int backdropPathIndex = cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH);
 
                         int id = cursor.getInt(idIndex);
                         String title = cursor.getString(titleIndex);
+                        String releaseDate = cursor.getString(releaseDateIndex);
+                        double voteAverage = cursor.getDouble(voteAverageIndex);
+                        int voteCount = cursor.getInt(voteCountIndex);
+                        String overview = cursor.getString(overviewIndex);
+                        String posterPath = cursor.getString(posterPathIndex);
+                        String backdropPath = cursor.getString(backdropPathIndex);
 
-                        Movie movie = new Movie();
-                        movie.setId(id);
-                        movie.setTitle(title);
+                        Movie movie = new Movie(id, title, releaseDate, voteAverage,
+                                voteCount, overview, posterPath, backdropPath);
 
                         movieList.add(movie);
                     }
@@ -136,6 +169,7 @@ public class FavoriteMoviesFragment extends Fragment implements
     @Override
     public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
         adapter.replaceData(data);
+        favoriteMovies.getLayoutManager().onRestoreInstanceState(savedListPosition);
     }
 
     @Override
@@ -143,12 +177,21 @@ public class FavoriteMoviesFragment extends Fragment implements
         adapter.replaceData(null);
     }
 
-    private static class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesHolder> {
+    private MovieItemListener itemListener = new MovieItemListener() {
+        @Override
+        public void onMovieClick(Movie clickedMovie) {
+            Intent intent = MovieDetailsActivity.newIntent(getActivity(), clickedMovie);
+            startActivity(intent);
+        }
+    };
+
+    static class MoviesAdapter extends RecyclerView.Adapter<MoviesViewHolder> {
 
         private List<Movie> movieList;
+        private MovieItemListener itemListener;
 
-        public FavoriteMoviesAdapter() {
-
+        public MoviesAdapter(MovieItemListener itemListener) {
+            this.itemListener = itemListener;
         }
 
         public void replaceData(List<Movie> movieList) {
@@ -157,16 +200,16 @@ public class FavoriteMoviesFragment extends Fragment implements
         }
 
         @Override
-        public FavoriteMoviesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_favorite_movie, parent, false);
-            return new FavoriteMoviesHolder(v);
+                    .inflate(R.layout.list_item_movie, parent, false);
+            return new MoviesViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(FavoriteMoviesHolder holder, int position) {
+        public void onBindViewHolder(MoviesViewHolder holder, int position) {
             Movie movie = movieList.get(position);
-            holder.bind(movie);
+            holder.bindMovie(movie, itemListener);
         }
 
         @Override
@@ -175,17 +218,40 @@ public class FavoriteMoviesFragment extends Fragment implements
         }
     }
 
-    static class FavoriteMoviesHolder extends RecyclerView.ViewHolder {
+    static class MoviesViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
-        @BindView(R.id.title) TextView title;
+        @BindView(R.id.movie_poster)
+        ImageView moviePoster;
 
-        public FavoriteMoviesHolder(View itemView) {
+        private Movie movie;
+        private MovieItemListener itemListener;
+
+        public MoviesViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
         }
 
-        public void bind(Movie movie) {
-            title.setText(movie.getTitle());
+        public void bindMovie(Movie movie, MovieItemListener itemListener) {
+            this.movie = movie;
+            this.itemListener = itemListener;
+
+            Context context = moviePoster.getContext();
+            Picasso.with(context).load("https://image.tmdb.org/t/p/w300" + movie.getPosterPath())
+                    .placeholder(R.drawable.poster_place_holder_w300)
+                    .into(moviePoster);
         }
+
+        @Override
+        public void onClick(View view) {
+            itemListener.onMovieClick(movie);
+        }
+    }
+
+    private interface MovieItemListener {
+
+        void onMovieClick(Movie clickedMovie);
     }
 }

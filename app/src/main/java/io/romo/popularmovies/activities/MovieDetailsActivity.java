@@ -175,6 +175,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     ContentValues values = new ContentValues();
                     values.put(MoviesContract.MovieEntry._ID, movie.getId());
                     values.put(MoviesContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+                    values.put(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+                    values.put(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+                    values.put(MoviesContract.MovieEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+                    values.put(MoviesContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+                    values.put(MoviesContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+                    values.put(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
                     getContentResolver().insert(MoviesContract.MovieEntry.CONTENT_URI, values);
                 }
                 favorite = !favorite;

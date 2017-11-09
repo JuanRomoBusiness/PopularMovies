@@ -35,7 +35,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " +
                 MoviesContract.MovieEntry.TABLE_NAME + " (" +
                 MoviesContract.MovieEntry._ID + " INTEGER PRIMARY KEY," +
-                MoviesContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL" +
+                MoviesContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_VOTE_COUNT + " INTEGER NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+                MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL" +
                 ")"
         );
     }

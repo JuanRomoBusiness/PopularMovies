@@ -19,6 +19,7 @@ package io.romo.popularmovies.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,11 +50,14 @@ public class MoviesFragment extends Fragment implements Callback<MoviesResponse>
 
     private static final String SORT_BY = "sort_by";
 
+    private static final String SAVED_LIST_POSITION = "list_position";
+
     @BindView(R.id.movies)
     RecyclerView movies;
     private MoviesAdapter adapter;
 
     private SortBy sortBy;
+    private Parcelable savedListPosition;
 
     public static MoviesFragment newInstance(String sortBy) {
         Bundle args = new Bundle();
@@ -68,6 +72,9 @@ public class MoviesFragment extends Fragment implements Callback<MoviesResponse>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sortBy = SortBy.valueOf(getArguments().getString(SORT_BY));
+        if (savedInstanceState != null) {
+            savedListPosition = savedInstanceState.getParcelable(SAVED_LIST_POSITION);
+        }
     }
 
     @Override
@@ -99,11 +106,18 @@ public class MoviesFragment extends Fragment implements Callback<MoviesResponse>
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LIST_POSITION,
+                movies.getLayoutManager().onSaveInstanceState());
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
+            movies.getLayoutManager().onRestoreInstanceState(savedListPosition);
         } else {
             // TODO: Handle error
         }
