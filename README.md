@@ -4,9 +4,15 @@
 
 ### Prerequisites
 
-You will need to obtain an API key from [TMDb](www.themoviedb.org).  Once you have your API key add it to the grade.properties file on the following line:
+You will need to obtain an API key from [TMDb](https://www.themoviedb.org).  Once you have your API key add it to the grade.properties file on the following line:
 
-    TMDb_API_KEY = "Your TMDb API key"
+    TheMovieDb_API_KEY = "Your TMDb API key"
+
+### Libraries
+
+* [ButterKnife](https://github.com/JakeWharton/butterknife)
+* [Picasso](https://github.com/square/picasso)
+* [Retrofit](https://github.com/square/retrofit)
 
 ### License
 
