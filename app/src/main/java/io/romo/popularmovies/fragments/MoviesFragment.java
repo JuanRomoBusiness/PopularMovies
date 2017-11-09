@@ -38,12 +38,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.romo.popularmovies.R;
+import io.romo.popularmovies.activities.MovieDetailActivity;
 import io.romo.popularmovies.model.Movie;
-import io.romo.popularmovies.rest.service.TheMovieDbService;
 import io.romo.popularmovies.rest.TheMovieDbClient;
 import io.romo.popularmovies.rest.response.MoviesResponse;
-import io.romo.popularmovies.activities.MovieDetailActivity;
-import io.romo.popularmovies.util.NetworkUtils;
+import io.romo.popularmovies.rest.service.TheMovieDbService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -245,10 +244,9 @@ public class MoviesFragment extends Fragment implements Callback<MoviesResponse>
         public void bindMovie(Movie movie, MovieItemListener itemListener) {
             this.movie = movie;
             this.itemListener = itemListener;
-            
+
             Context context = moviePoster.getContext();
-            Picasso.with(context).load(NetworkUtils.createImageUrl(movie.getPosterPath(),
-                                                                   NetworkUtils.ImageSize.SMALL))
+            Picasso.with(context).load("https://image.tmdb.org/t/p/w300" + movie.getPosterPath())
                     .placeholder(R.drawable.poster_place_holder_w300)
                     .into(moviePoster);
         }

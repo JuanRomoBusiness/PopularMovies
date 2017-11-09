@@ -22,34 +22,6 @@ import android.net.Uri;
 
 public class NetworkUtils {
 
-    public enum ImageSize {
-        MOBILE("w185"),
-        SMALL("w300"),
-        MEDIUM("w500"),
-        LARGE("w780");
-
-        private String imagePath;
-
-        ImageSize(String imagePath) {
-            this.imagePath = imagePath;
-        }
-
-        public String getImagePath() {
-            return imagePath;
-        }
-    }
-
-    public static String createImageUrl(String filePath, ImageSize imageSize) {
-        Uri uri = new Uri.Builder().scheme("https")
-                .authority("image.tmdb.org")
-                .appendPath("t")
-                .appendPath("p")
-                .appendPath(imageSize.getImagePath())
-                .appendEncodedPath(filePath)
-                .build();
-        return uri.toString();
-    }
-
     public static void watchYoutubeVideo(Context context, String id) {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
         if (appIntent.resolveActivity(context.getPackageManager()) != null) {

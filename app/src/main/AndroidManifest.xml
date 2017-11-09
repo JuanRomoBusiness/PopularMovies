@@ -45,6 +45,12 @@
             android:theme="@style/PopularMovies.TranslucentStatus">
         </activity>
 
+
+        <provider
+            android:name="io.romo.popularmovies.data.MoviesContentProvider"
+            android:authorities="io.romo.popularmovies"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

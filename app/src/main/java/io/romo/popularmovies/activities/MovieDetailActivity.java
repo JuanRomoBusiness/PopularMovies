@@ -94,11 +94,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         
         collapsingToolbar.setTitle(movie.getTitle());
         
-        Picasso.with(this).load(NetworkUtils.createImageUrl(movie.getBackdropPath(), NetworkUtils.ImageSize.LARGE))
+        Picasso.with(this).load("https://image.tmdb.org/t/p/w780" + movie.getBackdropPath())
                 .placeholder(R.drawable.backdrop_place_holder_w780)
                 .into(backdrop);
     
-        Picasso.with(this).load(NetworkUtils.createImageUrl(movie.getPosterPath(), NetworkUtils.ImageSize.SMALL))
+        Picasso.with(this).load("https://image.tmdb.org/t/p/w300" + movie.getPosterPath())
                 .placeholder(R.drawable.poster_place_holder_w300)
                 .into(poster);
         
