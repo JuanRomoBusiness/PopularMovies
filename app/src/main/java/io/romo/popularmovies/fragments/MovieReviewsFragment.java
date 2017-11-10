@@ -19,6 +19,7 @@ package io.romo.popularmovies.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,11 +47,14 @@ import retrofit2.Response;
 public class MovieReviewsFragment extends Fragment implements Callback<MovieReviewsResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
+
+    private static final String SAVED_LIST_POSITION = "list_position";
     
     @BindView(R.id.movie_reviews) RecyclerView movieReviews;
     private MovieReviewsAdapter adapter;
     
     private int movieId;
+    private Parcelable savedListPosition;
     
     public static MovieReviewsFragment newInstance(int movieId) {
         Bundle args = new Bundle();
@@ -65,6 +69,9 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         movieId = getArguments().getInt(ARG_MOVIE_ID);
+        if (savedInstanceState != null) {
+            savedListPosition = savedInstanceState.getParcelable(SAVED_LIST_POSITION);
+        }
     }
     
     @Override
@@ -89,12 +96,19 @@ public class MovieReviewsFragment extends Fragment implements Callback<MovieRevi
 
         return v;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LIST_POSITION,
+                movieReviews.getLayoutManager().onSaveInstanceState());
+    }
     
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onResponse(Call<MovieReviewsResponse> call, Response<MovieReviewsResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
+            movieReviews.getLayoutManager().onRestoreInstanceState(savedListPosition);
         } else {
             // TODO: Handle error
         }

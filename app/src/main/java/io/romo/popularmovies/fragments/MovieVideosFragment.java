@@ -17,6 +17,7 @@
 package io.romo.popularmovies.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,11 +44,14 @@ import retrofit2.Response;
 public class MovieVideosFragment extends Fragment implements Callback<MovieVideosResponse> {
     
     private static final String ARG_MOVIE_ID = "movie_id";
+
+    private static final String SAVED_LIST_POSITION = "list_position";
     
     @BindView(R.id.movie_videos) RecyclerView movieVideos;
     private MovieVideosAdapter adapter;
     
     private int movieId;
+    private Parcelable savedListPosition;
     
     public static MovieVideosFragment newInstance(int movieId) {
         Bundle args = new Bundle();
@@ -62,6 +66,9 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         movieId = getArguments().getInt(ARG_MOVIE_ID);
+        if (savedInstanceState != null) {
+            savedListPosition = savedInstanceState.getParcelable(SAVED_LIST_POSITION);
+        }
     }
     
     @Override
@@ -86,12 +93,19 @@ public class MovieVideosFragment extends Fragment implements Callback<MovieVideo
         
         return v;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LIST_POSITION,
+                movieVideos.getLayoutManager().onSaveInstanceState());
+    }
     
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onResponse(Call<MovieVideosResponse> call, Response<MovieVideosResponse> response) {
         if (response.isSuccessful()) {
             adapter.replaceData(response.body().getResults());
+            movieVideos.getLayoutManager().onRestoreInstanceState(savedListPosition);
         } else {
             // TODO: Handle error
         }
