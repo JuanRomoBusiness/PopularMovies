@@ -2,6 +2,12 @@
 
 <img src="art/launcher.png" width=300 >
 
+### Screenshots
+
+<img src="screenshots/movie_list.png" width="25%" />
+<img src="screenshots/movie_details.png" width="25%" />
+<img src="screenshots/movie_details_collapsed_toolbar.png" width="25%" />
+
 ### Prerequisites
 
 You will need to obtain an API key from [TMDb](https://www.themoviedb.org).  Once you have your API key add it to the grade.properties file on the following line:
