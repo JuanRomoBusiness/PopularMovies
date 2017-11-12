@@ -2,17 +2,15 @@
 
 <img src="art/launcher.png" width=300 >
 
-### Screenshots
-
-<img src="screenshots/movie_list.png" width="25%" />
-<img src="screenshots/movie_details.png" width="25%" />
-<img src="screenshots/movie_details_collapsed_toolbar.png" width="25%" />
-
 ### Prerequisites
 
 You will need to obtain an API key from [TMDb](https://www.themoviedb.org).  Once you have your API key add it to the [grade.properties](gradle.properties) file on the following line:
 
     TheMovieDb_API_KEY = "Your TMDb API key"
+    
+### Screenshots
+
+<img src="screenshots/movie_list.png" width="15%" /> <img src="screenshots/movie_details.png" width="15%" /> <img src="screenshots/movie_details_collapsed_toolbar.png" width="15%" />
 
 ### Libraries
 
