@@ -10,9 +10,7 @@ You will need to obtain an API key from [TMDb](https://www.themoviedb.org).  Onc
     
 ### Screenshots
 
-<img src="screenshots/movie_list.png" width="15%" />
-<img src="screenshots/movie_details.png" width="15%" />
-<img src="screenshots/movie_details_collapsed_toolbar.png" width="15%" />
+<img src="screenshots/movie_list.png" width="15%" /> <img src="screenshots/movie_details.png" width="15%" /> <img src="screenshots/movie_details_collapsed_toolbar.png" width="15%" />
 
 ### Libraries
 
